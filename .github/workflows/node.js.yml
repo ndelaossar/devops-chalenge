@@ -15,6 +15,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./codebase/rdicidr-0.1.0
 
     strategy:
       matrix:
@@ -32,7 +35,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          cache-dependency-path: 'codebase/rdicidr-0.1.0/package-lock.json'
       - run: npm ci
       - run: npm run lint
       - run: npm run prettier

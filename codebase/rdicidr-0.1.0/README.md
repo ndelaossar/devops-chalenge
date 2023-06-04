@@ -23,3 +23,4 @@ If you find this tool useful, you might enjoy reading my blog: [https://rderik.c
 # Line to test
 
 Test No1
+Test No2

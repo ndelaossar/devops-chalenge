@@ -31,30 +31,35 @@ jobs:
         with:
           terraform_version: '1.4.2' 
 
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
+      - name: Terraform init, plan and apply
+        run: |
+          echo `pwd`
+          echo "** Running Terraform Init**"
+          terraform init
 
-      - name: Terraform Init
-        id: init
-        run: terraform init
-        working-directory: './terraform'
+          echo "** Running Terraform Validate**"
+          terraform validate
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
+          echo "** Running Terraform Plan**"
+          terraform plan
+
         working-directory: './terraform'
+#     - name: Terraform Destroy
+#       run: |
+#         echo "** Running Terraform Destroy**"
+#         terraform plan -destroy
+# #        terraform destroy -auto-approve
+#       working-directory: ${{ github.event.inputs.tfpath }}
       
-      - name: Terraform Workspace
-        id: workspace
-        run: terraform workspace new ${{ github.head_ref || github.ref_name }}
-        working-directory: './terraform'
+#       - name: Terraform Workspace
+#         id: workspace
+#         run: terraform workspace new ${{ github.head_ref || github.ref_name }}
+#         working-directory: './terraform'
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -no-color
-        working-directory: './terraform'
+#       - name: Terraform Plan
+#         id: plan
+#         run: terraform plan -no-color
+#         working-directory: './terraform'
       
       # - name: Terraform Apply
       #   id: apply

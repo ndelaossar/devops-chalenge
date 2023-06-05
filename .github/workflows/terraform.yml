@@ -38,14 +38,14 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
-
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
       
       - name: Terraform Workspace
         id: workspace
         run: terraform workspace new ${{ github.head_ref || github.ref_name }}
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
 
       - name: Terraform Plan
         id: plan

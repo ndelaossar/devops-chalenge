@@ -14,9 +14,6 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: './terraform'
     if:  ${{ inputs.tf_confirm }}  
     steps:
       - 
@@ -42,18 +39,22 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
+        working-directory: './terraform'
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+        working-directory: './terraform'
       
       - name: Terraform Workspace
         id: workspace
         run: terraform workspace new ${{ github.head_ref || github.ref_name }}
+        working-directory: './terraform'
 
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
+        working-directory: './terraform'
       
       # - name: Terraform Apply
       #   id: apply

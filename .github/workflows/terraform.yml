@@ -8,11 +8,7 @@ on:
         required: true
         type: boolean
     paths:
-      - '.github/workflows/terraform.yml'
-defaults:
-  run:
-    working-directory: terraform
-  
+      - '.github/workflows/terraform.yml'  
 jobs:
   deploy:
     name: 'Terraform plan/deploy'

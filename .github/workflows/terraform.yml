@@ -8,15 +8,11 @@ on:
         required: true
         type: boolean
     paths:
-      - '.github/workflows/terraform.yml'
-  
+      - '.github/workflows/terraform.yml'  
 jobs:
-  terraform:
-    name: 'Terraform'
+  deploy:
+    name: 'Terraform plan/deploy'
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: './terraform'
     if:  ${{ inputs.tf_confirm }}  
     steps:
       - 
@@ -38,7 +34,6 @@ jobs:
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
-        working-directory:
 
       - name: Terraform Init
         id: init

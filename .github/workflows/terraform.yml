@@ -1,0 +1,64 @@
+name: 'Terraform GitHub Actions'
+on:
+  workflow_dispatch:
+    # Inputs the workflow expects.
+    inputs:
+      tf_confirm:
+        description: 'Confirm Terraform Execution'     
+        required: true
+        type: boolean
+    paths:
+      - '.github/workflows/terraform.yml'
+env:
+  tf_actions_working_dir: './terraform'
+  tf_workspace: ${{ github.head_ref || github.ref_name }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    if:  ${{ inputs.tf_confirm }}
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+    steps:
+      - 
+        name: check out the repo
+        uses: actions/checkout@v3
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.4.2' 
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+      
+      - name: Terraform Workspace
+        id: workspace
+        run: terraform workspace new ${{ env.tf_workspace }}
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+      
+      # - name: Terraform Apply
+      #   id: apply
+      #   run: terraform apply -auto-approve
+      
+      # - name: Terraform Destroy
+      #   id: destroy
+      #   run: terraform apply -destroy -auto-approve
+
+
